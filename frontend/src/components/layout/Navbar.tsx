@@ -5,6 +5,7 @@ import { ImCancelCircle as X } from "react-icons/im";
 import LOGO from "../../assets/LegalGPT-Nepal.png";
 
 import { ButtonFill as Button } from "../ui/Button";
+import { Link } from "react-router-dom";
 
 
 
@@ -14,10 +15,10 @@ const Navbar: React.FC = () => {
   return (
     <>
       {/* NAVBAR */}
-      <nav className="fixed top-0 h-[10vh] left-0 w-full bg-primary-dark/60 backdrop-blur-md text-white px-8 py-4 shadow-md flex items-center justify-between z-50">
+      <nav className="fixed  top-0 h-[10vh] left-0 w-full bg-primary-dark backdrop-blur-md text-white px-8 py-4 shadow-md flex items-center justify-between z-50 ">
         
         {/* Left - Logo + Name */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 ">
           <img
             src={LOGO}
             alt="logo"
@@ -29,7 +30,7 @@ const Navbar: React.FC = () => {
 
         {/* Center - Desktop Menu */}
         <ul className="hidden md:flex gap-10 text-[16px] font-medium">
-          <li className="cursor-pointer hover:text-secondary">Home</li>
+          <Link to="/" className="cursor-pointer hover:text-secondary">Home</Link>
           <li className="cursor-pointer hover:text-secondary">Features</li>
           <li className="cursor-pointer hover:text-secondary">Docs</li>
           <li className="cursor-pointer hover:text-secondary">About</li>

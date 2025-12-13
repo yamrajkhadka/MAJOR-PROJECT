@@ -1,14 +1,16 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import HeroPage from "./pages/HeroPage";
+//Pages
+import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
+
 function AppRoutes() {
 
 
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<HeroPage />} />
+                <Route path="/" element={<HomePage />} />
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>
         </Router>

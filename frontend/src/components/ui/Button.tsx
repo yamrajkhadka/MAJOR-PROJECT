@@ -17,7 +17,7 @@ export const ButtonFill = ({content, className}: ButtonProps) => {
 
   return (
         <button
-  className={`px-6 py-2 rounded-md border-2 border-primary 
+  className={`px-6 py-2 rounded-full border-2 border-primary 
     text-white 
     transition-all duration-300 
     hover:bg-primary-light font-semibold hover:text-white ${className}`}
