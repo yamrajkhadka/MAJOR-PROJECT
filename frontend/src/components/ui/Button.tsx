@@ -2,6 +2,7 @@
 interface ButtonProps {
     content: String;
     className: String;
+    onClick?: ()=> void;
 }
 
 const ButtonScale = ({content, className}: ButtonProps) => {
@@ -13,7 +14,7 @@ const ButtonScale = ({content, className}: ButtonProps) => {
   )
 }
 
-export const ButtonFill = ({content, className}: ButtonProps) => {
+export const ButtonFill = ({content, className, onClick}: ButtonProps) => {
 
   return (
         <button
@@ -21,6 +22,7 @@ export const ButtonFill = ({content, className}: ButtonProps) => {
     text-white 
     transition-all duration-300 
     hover:bg-primary-light font-semibold hover:text-white ${className}`}
+    onClick={onClick}
 >
 {content}</button>
 

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 ::selection {
   background: #990000; /* your color */
-  color: #000; /* text color */
+  color: #ffffff; /* text color */
 }
 
 @theme{
@@ -15,8 +15,6 @@
   --color-white:#ffffff;
   --color-black:#000000;
   
-  /* Dark mode */
-  --color-darkBg:#202120;         /* Main dark background */
-  --color-darkCard: #161B22;
+
 
 }

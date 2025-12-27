@@ -18,24 +18,61 @@ export default function FeatureCard({ title, icon:Icon, text }:FeatureCardProps)
 }
 
 
-function ToggleCard({ title, children, isOpen, onToggle }:any) {
+// ToggleCard Component
+interface ToggleCardProps {
+  title: string;
+  isOpen: boolean;
+  onToggle: () => void;
+  children: React.ReactNode;
+}
+const ChevronDown = ({ className = "" }) => (
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M19 9l-7 7-7-7"
+    />
+  </svg>
+);
+
+const ToggleCard: React.FC<ToggleCardProps> = ({
+  title,
+  isOpen,
+  onToggle,
+  children,
+}) => {
   return (
-    <div className=" rounded-2xl shadow-sm">
+    <div className="border border-gray-700 rounded-lg overflow-hidden bg-primary-dark shadow-lg hover:shadow-xl transition-shadow duration-300">
+      {/* Header */}
       <button
         onClick={onToggle}
-        className="w-full flex justify-between items-center px-6 py-4 bg-white/25 hover:bg-white/30 transition rounded-2xl"
+        className="w-full flex items-center justify-between px-6 py-4 bg-linear-to-r from-primary to-primary-dark hover:from-primary-dark hover:to-primary transition-all duration-300"
       >
-        <span className="text-lg text-text font-semibold">{title}</span>
-        <span className="text-2xl text-text">{isOpen ? "−" : "+"}</span>
+        <h3 className="text-lg font-semibold text-white text-left">{title}</h3>
+        <ChevronDown
+          className={`w-6 h-6 text-secondary transition-transform duration-300 ${
+            isOpen ? "rotate-180" : "rotate-0"
+          }`}
+        />
       </button>
 
-      {isOpen && (
-        <div className="px-6 py-4 text-text animate-fadeIn">
-          {children}
-        </div>
-      )}
+      {/* Content */}
+      <div
+        className={`transition-all duration-500 ease-in-out ${
+          isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+        } overflow-hidden`}
+      >
+        <div className="px-6 py-4 bg-gray-900/50">{children}</div>
+      </div>
     </div>
   );
-}
+};
 
 export { ToggleCard };
