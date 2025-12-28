@@ -1,0 +1,20 @@
+@import "tailwindcss";
+::selection {
+  background: #990000; /* your color */
+  color: #ffffff; /* text color */
+}
+
+@theme{
+  --default-font-family: 'poppins', sans-serif;
+
+  --color-primary: #1A365D;       /* Headers, main buttons (trustworthy deep blue) */
+  --color-primary-light: #2C5282; /* Hover states, secondary buttons */
+  --color-primary-dark: #0F2743;  /* Navbars, footers */
+  --color-secondary: #4A5568;     /* Icons, outlines, neutral text */
+  --color-text: #F2F2F2;
+  --color-white:#ffffff;
+  --color-black:#000000;
+  
+
+
+}
