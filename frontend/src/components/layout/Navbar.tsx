@@ -1,16 +1,21 @@
 import { useState } from 'react';
 import { Link } from "react-router-dom";
-import {motion} from 'framer-motion'
+import { motion } from 'framer-motion'
+import { useNavigate } from 'react-router-dom';
 //logo
 import { MdOutlineMenu as Menu } from "react-icons/md";
 import { RxCross2 as X } from "react-icons/rx";
 import { IoChevronDown } from "react-icons/io5";
 
 //components
-import  ButtonFill  from '../ui/Button';
+import ButtonFill from '../ui/Button';
 
 //images
 import logo from '../../assets/LegalGPT-Nepal.png'
+//oauth
+import { useGoogleLogin, googleLogout } from '@react-oauth/google';
+//zustand
+import useUserStore from '../../store/userStore';
 
 interface NavLinkProps {
   to: string;
@@ -28,6 +33,12 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [activeMobileDropdown, setActiveMobileDropdown] = useState<string | null>(null);
+  const navigate = useNavigate()
+  //import user 
+  const user = useUserStore(state => state.user)
+  const removeUser = useUserStore(state => state.removeUser)
+
+  console.log('user: ', user)
 
   const navLinks: NavBarProps[] = [
     { to: '/', label: 'Home' },
@@ -47,7 +58,7 @@ const Navbar = () => {
   ];
 
   const toggleSidebar = () => setIsOpen(!isOpen);
-  
+
   const closeSidebar = () => {
     setIsOpen(false);
     setActiveMobileDropdown(null);
@@ -56,12 +67,44 @@ const Navbar = () => {
   const toggleMobileDropdown = (label: string) => {
     setActiveMobileDropdown(activeMobileDropdown === label ? null : label);
   };
+  //Google OAuth login
+  const logIn = useGoogleLogin({
+    onSuccess: async (token) => {
+      console.log(token)
+      try {
+        const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: {
+            Authorization: `Bearer ${token.access_token}`
+          }
+        }
+        );
+        const userInfo = await response.json();
+        console.log('User Info:', userInfo);
+        localStorage.setItem('userToken', token.access_token)
+        navigate('/chat');
+      }
+      catch (err) {
+        console.log('Error in fetching data', err)
+      }
+    },
+    //on error login
+    onError: () => console.log("Error logging In")
+  })
+
+  //LOGOUT function
+  const logOut = () => {
+    googleLogout();
+    localStorage.removeItem('userToken')
+    removeUser();
+    location.reload()
+
+  }
 
   return (
-     <>
+    <>
       <nav className={`w-full h-16 md:h-20 shadow-sm sticky top-0 z-50 border-b ${isOpen ? 'bg-primary-dark' : 'bg-primary-dark'}`}>
         <div className="mx-4 sm:mx-8 md:mx-12 lg:mx-16 xl:mx-65 flex h-full justify-between items-center">
-          
+
           {/* Logo */}
           <div className='flex items-center space-x-2'>
             <img src={logo} alt="LegalGPT Nepal Logo" className='h-10 w-10 md:h-12 md:w-12 rounded-full' />
@@ -75,9 +118,9 @@ const Navbar = () => {
             {navLinks.map((link) => (
               <motion.div
                 key={link.label}
-                className="relative"               
-                 whileHover={{ y: -2 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}   
+                className="relative"
+                whileHover={{ y: -2 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 onMouseEnter={() => link.hasDropdown && setActiveDropdown(link.label)}
                 onMouseLeave={() => link.hasDropdown && setActiveDropdown(null)}
               >
@@ -85,17 +128,16 @@ const Navbar = () => {
                   <>
                     <button className="text-white hover:text-secondary transition-colors duration-200 px-3 py-2 text-sm xl:text-base font-medium flex items-center gap-1">
                       {link.label}
-                      <IoChevronDown 
-                        className={`transition-transform duration-300 ${
-                          activeDropdown === link.label ? 'rotate-180' : ''
-                        }`} 
+                      <IoChevronDown
+                        className={`transition-transform duration-300 ${activeDropdown === link.label ? 'rotate-180' : ''
+                          }`}
                       />
                     </button>
 
                     {/* Dropdown Menu */}
                     {activeDropdown === link.label && (
-                      <motion.div 
-                      className="absolute top-full left-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-100 py-2 animate-fadeIn min-w-[250px]">
+                      <motion.div
+                        className="absolute top-full left-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-100 py-2 animate-fadeIn min-w-[250px]">
                         {link.subLinks?.map((subLink) => (
                           <Link
                             key={subLink.label}
@@ -122,12 +164,11 @@ const Navbar = () => {
 
           {/* Desktop Buttons */}
           <div className="hidden lg:flex gap-3 items-center">
-            <Link to='signup'>
-              <ButtonFill content='Signup' className='px-6' />
-            </Link>
-            <Link to='login'>
-              <ButtonFill content='Login' className='px-6' />
-            </Link>
+            {/* <Link to='login'> */}
+            {user?.name ? <ButtonFill content='Logout' onClick={() => logOut()} className='px-6' /> :
+              <ButtonFill content='Login' onClick={() => logIn()} className='px-6' />
+            }
+            {/* </Link> */}
           </div>
 
           {/* Mobile/Tablet Menu Button */}
@@ -155,9 +196,8 @@ const Navbar = () => {
 
       {/* Mobile Sidebar */}
       <div
-        className={`fixed top-0 right-0 h-full w-80 bg-primary-dark shadow-2xl z-50 transform transition-transform duration-300 ease-in-out lg:hidden overflow-y-auto ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        className={`fixed top-0 right-0 h-full w-80 bg-primary-dark shadow-2xl z-50 transform transition-transform duration-300 ease-in-out lg:hidden overflow-y-auto ${isOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
       >
         {/* Sidebar Header */}
         <div className="flex justify-between items-center p-6 border-b border-gray-200">
@@ -177,10 +217,10 @@ const Navbar = () => {
         {/* Sidebar Navigation Links */}
         <div className="flex flex-col p-6 space-y-2 pb-32">
           {navLinks.map((link) => (
-            <motion.div 
-            key={link.label}
-            whileHover={{ x: 8 }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}   
+            <motion.div
+              key={link.label}
+              whileHover={{ x: 8 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
             >
               {link.hasDropdown ? (
                 <>
@@ -190,10 +230,9 @@ const Navbar = () => {
                     className="w-full flex items-center justify-between text-text hover:text-secondary  transition-all duration-200 px-4 py-3 rounded-lg text-base font-medium"
                   >
                     <span>{link.label}</span>
-                    <IoChevronDown 
-                      className={`transition-transform duration-300 ${
-                        activeMobileDropdown === link.label ? 'rotate-180' : ''
-                      }`} 
+                    <IoChevronDown
+                      className={`transition-transform duration-300 ${activeMobileDropdown === link.label ? 'rotate-180' : ''
+                        }`}
                     />
                   </button>
 

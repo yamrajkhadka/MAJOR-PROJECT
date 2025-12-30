@@ -109,15 +109,15 @@ const ChatInterface: React.FC = () => {
 
     //create new chat
     const openNewChat =()=>{
-        // console.log(chats)
+        const newChatId = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        console.log(newChatId)
         const newChat: Chat= {
-            id:'7',
+            id:newChatId,
             title:' ',
             timestamp: new Date()
         }
         setChats((prev)=> [...prev, newChat])
-        setActiveChatId(newChat.id)
-        
+        setActiveChatId(newChat.id)   
     }
 
     return (
