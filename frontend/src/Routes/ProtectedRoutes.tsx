@@ -6,7 +6,7 @@ import useUserStore from "../store/userStore";
 const ProtectedRoutes = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const user = useUserStore(state =>state.user)
-  if(user)
+  if(user?.name)
     return <>{children}</>
   else
     navigate('/')

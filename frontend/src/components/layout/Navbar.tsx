@@ -69,19 +69,19 @@ const Navbar = () => {
   };
   //Google OAuth login
   const logIn = useGoogleLogin({
-    onSuccess: async (token) => {
-      console.log(token)
+    onSuccess: async (tokenResponse) => {
+      console.log(tokenResponse)
       try {
         const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
           headers: {
-            Authorization: `Bearer ${token.access_token}`
+            Authorization: `Bearer ${tokenResponse.access_token}`
           }
-        }
-        );
+        });
         const userInfo = await response.json();
         console.log('User Info:', userInfo);
-        localStorage.setItem('userToken', token.access_token)
+        localStorage.setItem('userToken', tokenResponse.access_token)
         navigate('/chat');
+        location.reload();
       }
       catch (err) {
         console.log('Error in fetching data', err)
@@ -166,7 +166,7 @@ const Navbar = () => {
           <div className="hidden lg:flex gap-3 items-center">
             {/* <Link to='login'> */}
             {user?.name ? <ButtonFill content='Logout' onClick={() => logOut()} className='px-6' /> :
-              <ButtonFill content='Login' onClick={() => logIn()} className='px-6' />
+              <ButtonFill content='Login' onClick={logIn} className='px-6' />
             }
             {/* </Link> */}
           </div>

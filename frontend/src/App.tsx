@@ -19,7 +19,7 @@ function App() {
           }
         );
         const result = await response.json();
-        console.log(result);
+        // console.log(result);
         addUser({id:result.sub, name:result.name,profile:result.picture, email:result.email})
     } catch (err) {
       console.log(err);
