@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # LegalGPT Nepal 🇳🇵⚖️
 
 ![Status](https://img.shields.io/badge/Status-In%20Development-yellow)
@@ -167,3 +168,6 @@ pip install -r requirements.txt
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 *Submitted as a fulfillment of the Final Year Project, Bachelor of Computer Engineering.*
+=======
+# MAJOR-PROJECT
+>>>>>>> e98bd4b67bd639d064a097a05cc395009f3a9a27
